@@ -64,7 +64,7 @@ const severityConfig = {
 
 export const RealtimeAttackFeed = () => {
   return (
-    <Card className="border-2 border-primary/30 bg-card">
+    <Card className="border-2 border-primary/30 bg-card card-3d">
       <CardHeader>
         <CardTitle className="text-foreground flex items-center gap-2">
           <Shield className="w-5 h-5 text-primary" />

@@ -11,7 +11,7 @@ const data = [
 
 export const AttackTypeChart = () => {
   return (
-    <Card className="border-2 border-primary/30 bg-card">
+    <Card className="border-2 border-primary/30 bg-card card-3d">
       <CardHeader>
         <CardTitle className="text-foreground">Attack Types Distribution</CardTitle>
         <CardDescription className="text-muted-foreground">Classification of detected threats</CardDescription>

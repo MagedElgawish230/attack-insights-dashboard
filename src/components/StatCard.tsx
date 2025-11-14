@@ -29,7 +29,11 @@ export const StatCard = ({ title, value, icon: Icon, trend, variant = "default" 
   };
 
   return (
-    <Card className={cn("p-6 border-2 transition-all hover:shadow-lg hover:shadow-primary/20", variantStyles[variant])}>
+    <Card className={cn(
+      "p-6 border-2 transition-all duration-500 card-3d glow-3d",
+      "hover:shadow-2xl hover:shadow-primary/30",
+      variantStyles[variant]
+    )}>
       <div className="flex items-start justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -40,7 +44,10 @@ export const StatCard = ({ title, value, icon: Icon, trend, variant = "default" 
             </p>
           )}
         </div>
-        <div className={cn("p-3 rounded-lg bg-background/50", iconStyles[variant])}>
+        <div className={cn(
+          "p-3 rounded-lg bg-background/50 transform transition-transform duration-300 hover:scale-110 hover:rotate-6",
+          iconStyles[variant]
+        )}>
           <Icon className="w-6 h-6" />
         </div>
       </div>
