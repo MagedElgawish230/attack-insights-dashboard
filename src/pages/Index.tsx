@@ -3,6 +3,7 @@ import { StatCard } from "@/components/StatCard";
 import { AttackChart } from "@/components/AttackChart";
 import { AttackTypeChart } from "@/components/AttackTypeChart";
 import { RealtimeAttackFeed } from "@/components/RealtimeAttackFeed";
+import logo from "@/assets/sentriai-logo.png";
 
 const Index = () => {
   return (
@@ -12,11 +13,9 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/20 border border-primary/30">
-                <Shield className="w-6 h-6 text-primary" />
-              </div>
+              <img src={logo} alt="SentriAI Logo" className="w-12 h-12 rounded-lg" />
               <div>
-                <h1 className="text-2xl font-bold text-foreground">AI WAF Dashboard</h1>
+                <h1 className="text-2xl font-bold text-foreground">SentriAI</h1>
                 <p className="text-sm text-muted-foreground">AI-Powered Predictive Web Security System</p>
               </div>
             </div>
