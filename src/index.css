@@ -68,4 +68,42 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* 3D Perspective Container */
+  .perspective-container {
+    perspective: 1500px;
+    transform-style: preserve-3d;
+  }
+
+  /* 3D Card Effect */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .card-3d:hover {
+    transform: rotateX(2deg) rotateY(-2deg) translateZ(10px);
+  }
+
+  /* Floating Animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) translateZ(0px);
+    }
+    50% {
+      transform: translateY(-10px) translateZ(20px);
+    }
+  }
+
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* 3D Glow Effect */
+  .glow-3d {
+    box-shadow: 
+      0 0 20px hsl(var(--primary) / 0.3),
+      0 0 40px hsl(var(--primary) / 0.2),
+      0 10px 30px rgba(0, 0, 0, 0.3);
+  }
 }

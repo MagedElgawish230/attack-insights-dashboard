@@ -13,7 +13,7 @@ const data = [
 
 export const AttackChart = () => {
   return (
-    <Card className="border-2 border-primary/30 bg-card">
+    <Card className="border-2 border-primary/30 bg-card card-3d">
       <CardHeader>
         <CardTitle className="text-foreground">Attack Timeline</CardTitle>
         <CardDescription className="text-muted-foreground">24-hour attack pattern analysis</CardDescription>
