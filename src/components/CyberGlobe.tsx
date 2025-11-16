@@ -16,18 +16,18 @@ export const CyberGlobe = () => {
     <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
       <Sphere ref={meshRef} args={[1, 64, 64]} scale={1.5}>
         <MeshDistortMaterial
-          color="#00d9ff"
+          color="#f5d547"
           attach="material"
           distort={0.3}
           speed={2}
-          roughness={0.4}
-          metalness={0.8}
-          emissive="#00d9ff"
-          emissiveIntensity={0.5}
+          roughness={0.2}
+          metalness={0.9}
+          emissive="#f5d547"
+          emissiveIntensity={0.6}
         />
       </Sphere>
-      <pointLight position={[2, 2, 2]} intensity={1} color="#00d9ff" />
-      <pointLight position={[-2, -2, -2]} intensity={0.5} color="#ff0055" />
+      <pointLight position={[2, 2, 2]} intensity={1.2} color="#f5d547" />
+      <pointLight position={[-2, -2, -2]} intensity={0.6} color="#d4a044" />
     </Float>
   );
 };
