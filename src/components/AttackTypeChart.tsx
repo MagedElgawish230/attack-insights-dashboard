@@ -2,11 +2,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 const data = [
-  { name: "SQL Injection", value: 35, color: "hsl(0 84% 60%)" },
-  { name: "XSS", value: 28, color: "hsl(38 92% 50%)" },
-  { name: "DDoS", value: 20, color: "hsl(195 100% 50%)" },
-  { name: "Path Traversal", value: 10, color: "hsl(142 71% 45%)" },
-  { name: "Other", value: 7, color: "hsl(215 20% 65%)" },
+  { name: "SQL Injection", value: 438, color: "hsl(350 89% 60%)" },
+  { name: "XSS", value: 512, color: "hsl(38 92% 50%)" },
+  { name: "Command Injection", value: 297, color: "hsl(45 100% 60%)" },
 ];
 
 export const AttackTypeChart = () => {
