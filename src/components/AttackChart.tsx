@@ -27,8 +27,8 @@ export const AttackChart = () => {
                 <stop offset="95%" stopColor="hsl(0 84% 60%)" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="blockedGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(195 100% 50%)" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="hsl(195 100% 50%)" stopOpacity={0} />
+                <stop offset="5%" stopColor="hsl(45 100% 60%)" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="hsl(45 100% 60%)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -53,7 +53,7 @@ export const AttackChart = () => {
             <Area
               type="monotone"
               dataKey="blocked"
-              stroke="hsl(195 100% 50%)"
+              stroke="hsl(45 100% 60%)"
               fillOpacity={1}
               fill="url(#blockedGradient)"
               strokeWidth={2}

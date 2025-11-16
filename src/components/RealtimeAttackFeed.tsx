@@ -12,46 +12,70 @@ const attacks = [
     ip: "192.168.1.45",
     time: "2 mins ago",
     status: "blocked",
+    payload: "' OR '1'='1' --",
   },
   {
     id: 2,
     type: "XSS Attack",
-    severity: "high",
+    severity: "critical",
     ip: "10.0.0.123",
-    time: "5 mins ago",
+    time: "3 mins ago",
     status: "blocked",
+    payload: "<script>alert('XSS')</script>",
   },
   {
     id: 3,
-    type: "DDoS Attempt",
+    type: "Command Injection",
     severity: "critical",
     ip: "172.16.0.89",
-    time: "8 mins ago",
+    time: "5 mins ago",
     status: "blocked",
+    payload: "; cat /etc/passwd",
   },
   {
     id: 4,
-    type: "Path Traversal",
-    severity: "medium",
+    type: "SQL Injection",
+    severity: "high",
     ip: "192.168.2.10",
-    time: "12 mins ago",
+    time: "8 mins ago",
     status: "blocked",
+    payload: "UNION SELECT * FROM users",
   },
   {
     id: 5,
-    type: "Brute Force",
+    type: "XSS Attack",
     severity: "high",
     ip: "203.0.113.45",
-    time: "15 mins ago",
+    time: "12 mins ago",
     status: "blocked",
+    payload: "<img src=x onerror=alert(1)>",
   },
   {
     id: 6,
-    type: "Suspicious Pattern",
-    severity: "low",
+    type: "Command Injection",
+    severity: "critical",
     ip: "198.51.100.23",
+    time: "15 mins ago",
+    status: "blocked",
+    payload: "| rm -rf /",
+  },
+  {
+    id: 7,
+    type: "SQL Injection",
+    severity: "medium",
+    ip: "172.20.5.67",
     time: "18 mins ago",
-    status: "monitored",
+    status: "blocked",
+    payload: "admin' --",
+  },
+  {
+    id: 8,
+    type: "XSS Attack",
+    severity: "high",
+    ip: "10.10.10.99",
+    time: "22 mins ago",
+    status: "blocked",
+    payload: "javascript:void(0)",
   },
 ];
 
@@ -96,6 +120,9 @@ export const RealtimeAttackFeed = () => {
                           <span>•</span>
                           <span>{attack.time}</span>
                         </div>
+                        <code className="text-xs text-destructive bg-destructive/10 px-2 py-1 rounded block mt-1 font-mono">
+                          {(attack as any).payload}
+                        </code>
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2">
