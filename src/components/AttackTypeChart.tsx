@@ -1,13 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
-const data = [
-  { name: "SQL Injection", value: 438, color: "hsl(350 89% 60%)" },
-  { name: "XSS", value: 512, color: "hsl(38 92% 50%)" },
-  { name: "Command Injection", value: 297, color: "hsl(45 100% 60%)" },
-];
 
-export const AttackTypeChart = () => {
+interface AttackTypeData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export const AttackTypeChart = ({ data }: { data: AttackTypeData[] }) => {
   return (
     <Card className="border-2 border-primary/30 bg-card card-3d">
       <CardHeader>

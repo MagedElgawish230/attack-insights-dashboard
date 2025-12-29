@@ -2,12 +2,24 @@ import { Shield, Activity, AlertTriangle, CheckCircle, TrendingUp, Globe } from 
 import { StatCard } from "@/components/StatCard";
 import { AttackChart } from "@/components/AttackChart";
 import { AttackTypeChart } from "@/components/AttackTypeChart";
+import { useState } from "react";
 import { RealtimeAttackFeed } from "@/components/RealtimeAttackFeed";
 import { Scene3D } from "@/components/Scene3D";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { websites } from "@/data/mockData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/sentriai-logo.png";
 
 const Index = () => {
+  const [selectedWebsiteId, setSelectedWebsiteId] = useState<string>(websites[0].id);
+  const selectedWebsite = websites.find(w => w.id === selectedWebsiteId) || websites[0];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -15,17 +27,31 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img 
-                src={logo} 
-                alt="SentriAI Logo" 
-                className="w-12 h-12 rounded-lg transform transition-transform duration-300 hover:scale-110 hover:rotate-6" 
+              <img
+                src={logo}
+                alt="SentriAI Logo"
+                className="w-12 h-12 rounded-lg transform transition-transform duration-300 hover:scale-110 hover:rotate-6"
               />
               <div>
                 <h1 className="text-2xl font-bold text-foreground">SentriAI</h1>
                 <p className="text-sm text-muted-foreground">AI-Powered Predictive Web Security System</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              <div className="w-[200px]">
+                <Select value={selectedWebsiteId} onValueChange={setSelectedWebsiteId}>
+                  <SelectTrigger className="bg-background/50 backdrop-blur-sm border-primary/20">
+                    <SelectValue placeholder="Select Website" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {websites.map((site) => (
+                      <SelectItem key={site.id} value={site.id}>
+                        {site.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="px-3 py-1.5 rounded-full bg-success/20 border border-success/30 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 <span className="text-sm font-medium text-success">System Active</span>
@@ -45,7 +71,7 @@ const Index = () => {
               <CardDescription className="text-muted-foreground">Interactive 3D security monitoring sphere</CardDescription>
             </CardHeader>
             <CardContent>
-              <Scene3D />
+              <Scene3D attacks={selectedWebsite.recentAttacks} />
             </CardContent>
           </Card>
         </div>
@@ -54,27 +80,27 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
             title="Total Threats Detected"
-            value="1,247"
+            value={selectedWebsite.stats.totalThreats}
             icon={AlertTriangle}
-            trend={{ value: 12, isPositive: false }}
+            trend={{ value: Math.abs(selectedWebsite.stats.trend), isPositive: selectedWebsite.stats.trend > 0 }}
             variant="critical"
           />
           <StatCard
             title="Threats Blocked"
-            value="1,189"
+            value={selectedWebsite.stats.threatsBlocked}
             icon={CheckCircle}
-            trend={{ value: 8, isPositive: true }}
+            trend={{ value: Math.abs(selectedWebsite.stats.blockedTrend), isPositive: selectedWebsite.stats.blockedTrend > 0 }}
             variant="success"
           />
           <StatCard
             title="Active Protection"
-            value="99.2%"
+            value={selectedWebsite.stats.activeProtection}
             icon={Shield}
             variant="default"
           />
           <StatCard
             title="False Positives"
-            value="58"
+            value={selectedWebsite.stats.falsePositives}
             icon={Activity}
             trend={{ value: 5, isPositive: true }}
             variant="warning"
@@ -83,34 +109,34 @@ const Index = () => {
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <AttackChart />
-          <AttackTypeChart />
+          <AttackChart data={selectedWebsite.attackTrend} />
+          <AttackTypeChart data={selectedWebsite.attackTypes} />
         </div>
 
         {/* Additional Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <StatCard
             title="Avg Response Time"
-            value="0.8ms"
+            value={selectedWebsite.stats.avgResponseTime}
             icon={TrendingUp}
             variant="default"
           />
           <StatCard
             title="Protected Endpoints"
-            value="247"
+            value={selectedWebsite.stats.protectedEndpoints}
             icon={Globe}
             variant="default"
           />
           <StatCard
             title="ML Model Accuracy"
-            value="98.7%"
+            value={selectedWebsite.stats.modelAccuracy}
             icon={Activity}
             variant="success"
           />
         </div>
 
         {/* Real-time Feed */}
-        <RealtimeAttackFeed />
+        <RealtimeAttackFeed attacks={selectedWebsite.recentAttacks} />
       </main>
     </div>
   );

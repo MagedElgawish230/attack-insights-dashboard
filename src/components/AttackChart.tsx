@@ -1,17 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const data = [
-  { time: "00:00", attacks: 12, blocked: 11 },
-  { time: "04:00", attacks: 8, blocked: 8 },
-  { time: "08:00", attacks: 24, blocked: 22 },
-  { time: "12:00", attacks: 45, blocked: 42 },
-  { time: "16:00", attacks: 38, blocked: 35 },
-  { time: "20:00", attacks: 52, blocked: 48 },
-  { time: "23:59", attacks: 31, blocked: 29 },
-];
 
-export const AttackChart = () => {
+interface AttackData {
+  time: string;
+  attacks: number;
+  blocked: number;
+}
+
+export const AttackChart = ({ data }: { data: AttackData[] }) => {
   return (
     <Card className="border-2 border-primary/30 bg-card card-3d">
       <CardHeader>
