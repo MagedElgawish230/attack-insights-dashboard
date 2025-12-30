@@ -5,6 +5,9 @@ import { AttackTypeChart } from "@/components/AttackTypeChart";
 import { useState } from "react";
 import { RealtimeAttackFeed } from "@/components/RealtimeAttackFeed";
 import { Scene3D } from "@/components/Scene3D";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import logo from "@/assets/sentriai-logo.png";
+import { ModeToggle } from "@/components/mode-toggle";
 import {
   Select,
   SelectContent,
@@ -12,14 +15,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { websites } from "@/data/mockData";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import logo from "@/assets/sentriai-logo.png";
-import { ModeToggle } from "@/components/mode-toggle";
+import { useDashboardData } from "@/hooks/use-dashboard-data";
 
 const Index = () => {
-  const [selectedWebsiteId, setSelectedWebsiteId] = useState<string>(websites[0].id);
+  const { websites, isLoading } = useDashboardData();
+  const [selectedWebsiteId, setSelectedWebsiteId] = useState<string>("");
+
+  // Update selected website when data is loaded
+  if (!selectedWebsiteId && websites.length > 0) {
+    setSelectedWebsiteId(websites[0].id);
+  }
+
   const selectedWebsite = websites.find(w => w.id === selectedWebsiteId) || websites[0];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Defensive check used if data fetch fails entirely and mock data is also missing
+  if (websites.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground gap-4">
+        <h2 className="text-xl font-bold">No Data Available</h2>
+        <p className="text-muted-foreground">Please configure Supabase or check your data source.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
