@@ -15,6 +15,7 @@ import {
 import { websites } from "@/data/mockData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/sentriai-logo.png";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Index = () => {
   const [selectedWebsiteId, setSelectedWebsiteId] = useState<string>(websites[0].id);
@@ -56,6 +57,7 @@ const Index = () => {
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 <span className="text-sm font-medium text-success">System Active</span>
               </div>
+              <ModeToggle />
             </div>
           </div>
         </div>

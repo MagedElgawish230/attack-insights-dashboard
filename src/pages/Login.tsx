@@ -8,6 +8,8 @@ import { Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/sentriai-logo.png";
 
+import { ModeToggle } from "@/components/mode-toggle";
+
 const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -32,11 +34,15 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="min-h-screen bg-background flex items-center justify-center p-4 relative">
+            <div className="absolute top-4 right-4">
+                <ModeToggle />
+            </div>
             {/* Background decoration */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none" />
 
             <Card className="w-full max-w-md border-2 border-primary/30 bg-card/50 backdrop-blur-md shadow-2xl relative z-10">
+
                 <CardHeader className="text-center space-y-2">
                     <div className="mx-auto w-16 h-16 mb-4 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
                         <img
