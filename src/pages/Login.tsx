@@ -44,11 +44,11 @@ const Login = () => {
             <Card className="w-full max-w-md border-2 border-primary/30 bg-card/50 backdrop-blur-md shadow-2xl relative z-10">
 
                 <CardHeader className="text-center space-y-2">
-                    <div className="mx-auto w-16 h-16 mb-4 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                    <div className="flex justify-center mb-4">
                         <img
                             src={logo}
                             alt="SentriAI Logo"
-                            className="w-12 h-12 rounded-lg"
+                            className="w-16 h-16 rounded-xl transform transition-transform duration-300 hover:scale-110 hover:rotate-6"
                         />
                     </div>
                     <CardTitle className="text-2xl font-bold tracking-tight">Admin Portal</CardTitle>
