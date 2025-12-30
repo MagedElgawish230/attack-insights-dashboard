@@ -1,6 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertTriangle, Shield, AlertCircle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +31,7 @@ export const RealtimeAttackFeed = ({ attacks }: { attacks: AttackEvent[] }) => {
         <CardDescription className="text-muted-foreground">Live security event monitoring</CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] pr-4">
+        <div className="h-[500px] w-full overflow-y-auto overflow-x-hidden pr-2 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
           <div className="space-y-3">
             {attacks.map((attack) => {
               const config = severityConfig[attack.severity as keyof typeof severityConfig];
@@ -76,7 +75,7 @@ export const RealtimeAttackFeed = ({ attacks }: { attacks: AttackEvent[] }) => {
               );
             })}
           </div>
-        </ScrollArea>
+        </div>
       </CardContent>
     </Card>
   );
