@@ -54,7 +54,7 @@ export const RealtimeAttackFeed = ({ attacks }: { attacks: AttackEvent[] }) => {
                           <span>•</span>
                           <span>{attack.time}</span>
                         </div>
-                        <code className="text-xs text-destructive bg-destructive/10 px-2 py-1 rounded block mt-1 font-mono">
+                        <code className="text-xs text-destructive bg-destructive/10 px-2 py-1 rounded block mt-1 font-mono break-all whitespace-pre-wrap">
                           {attack.payload}
                         </code>
                       </div>
