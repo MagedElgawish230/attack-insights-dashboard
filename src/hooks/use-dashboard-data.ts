@@ -44,11 +44,20 @@ export const useDashboardData = () => {
 
                     const transformedData: WebsiteData[] = Array.from(sitesMap.entries()).map(([url, siteAttacks]) => {
                         // Infer name from the first attack that has it, or derived from URL
-                        const name = siteAttacks.find(a => a.target_name)?.target_name || new URL(url).hostname;
+                        let hostname = 'Unknown Site';
+                        try {
+                            if (url !== 'unknown') {
+                                hostname = new URL(url).hostname;
+                            }
+                        } catch (e) {
+                            hostname = url; // Fallback to raw string if valid URL parse fails
+                        }
+
+                        const name = siteAttacks.find(a => a.target_name)?.target_name || hostname;
 
                         // Calculate stats from actual data
                         const totalThreats = siteAttacks.length;
-                        const blockedThreats = siteAttacks.filter((a: any) => a.status === 'blocked').length;
+                        const blockedThreats = siteAttacks.filter((a: any) => a.status?.toLowerCase() === 'blocked').length;
 
                         // Simple trend calculation (this vs previous period would be improved in full backend)
                         // For now we just return a static number or random trend to keep UI looking alive
@@ -60,7 +69,7 @@ export const useDashboardData = () => {
                             const timeKey = `${hour.toString().padStart(2, '0')}:00`;
                             if (!attacksByHour[timeKey]) attacksByHour[timeKey] = { attacks: 0, blocked: 0 };
                             attacksByHour[timeKey].attacks++;
-                            if (a.status === 'blocked') attacksByHour[timeKey].blocked++;
+                            if (a.status?.toLowerCase() === 'blocked') attacksByHour[timeKey].blocked++;
                         });
 
                         const attackTrend = Object.entries(attacksByHour).map(([key, val]) => ({
@@ -68,6 +77,25 @@ export const useDashboardData = () => {
                             attacks: val.attacks,
                             blocked: val.blocked
                         })).sort((a, b) => a.time.localeCompare(b.time));
+
+                        // Trend Calculation (Current Hour vs Previous Hour)
+                        const now = new Date();
+                        const currentHourIdx = now.getHours();
+                        const prevHourIdx = currentHourIdx === 0 ? 23 : currentHourIdx - 1;
+
+                        const currentHourKey = `${currentHourIdx.toString().padStart(2, '0')}:00`;
+                        const prevHourKey = `${prevHourIdx.toString().padStart(2, '0')}:00`;
+
+                        const currentStats = attacksByHour[currentHourKey] || { attacks: 0, blocked: 0 };
+                        const prevStats = attacksByHour[prevHourKey] || { attacks: 0, blocked: 0 };
+
+                        const calculateTrend = (current: number, previous: number) => {
+                            if (previous === 0) return current > 0 ? 100 : 0;
+                            return Math.round(((current - previous) / previous) * 100);
+                        };
+
+                        const trend = calculateTrend(currentStats.attacks, prevStats.attacks);
+                        const blockedTrend = calculateTrend(currentStats.blocked, prevStats.blocked);
 
                         // If no trend data, provide some empty defaults
                         if (attackTrend.length === 0) {
@@ -107,10 +135,17 @@ export const useDashboardData = () => {
                                 activeProtection: totalThreats > 0 ? ((blockedThreats / totalThreats) * 100).toFixed(1) + "%" : "100%",
                                 falsePositives: "0", // Placeholder until we have this data
                                 avgResponseTime: "0.5ms", // Placeholder
-                                protectedEndpoints: "N/A", // Placeholder
+                                protectedEndpoints: (new Set(siteAttacks.map((a: any) => {
+                                    if (a.path) return a.path;
+                                    try {
+                                        return new URL(a.target_url).pathname;
+                                    } catch {
+                                        return null;
+                                    }
+                                }).filter(Boolean))).size.toString(),
                                 modelAccuracy: "99.0%", // Placeholder
-                                trend: 0, // Placeholder
-                                blockedTrend: 0 // Placeholder
+                                trend: trend,
+                                blockedTrend: blockedTrend
                             },
                             attackTrend,
                             attackTypes,
@@ -118,7 +153,7 @@ export const useDashboardData = () => {
                         };
                     });
 
-                    if (transformedData.length > 0) {
+                    if (transformedData.length >= 0) {
                         setWebsites(transformedData);
                     }
                 }

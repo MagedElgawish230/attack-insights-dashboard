@@ -34,7 +34,7 @@ export const RealtimeAttackFeed = ({ attacks }: { attacks: AttackEvent[] }) => {
         <div className="h-[500px] w-full overflow-y-auto overflow-x-hidden pr-2 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
           <div className="space-y-3">
             {attacks.map((attack) => {
-              const config = severityConfig[attack.severity as keyof typeof severityConfig];
+              const config = severityConfig[attack.severity as keyof typeof severityConfig] || severityConfig.medium;
               const Icon = config.icon;
 
               return (
