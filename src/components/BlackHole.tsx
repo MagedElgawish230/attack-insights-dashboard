@@ -15,6 +15,7 @@ interface Attack {
 
 interface BlackHoleProps {
     attacks: Attack[];
+    isPaused?: boolean;
 }
 
 const PARTICLE_COUNT = 100;
@@ -39,7 +40,7 @@ const getSeverityColor = (severity: string) => {
     }
 };
 
-export const BlackHole = ({ attacks }: BlackHoleProps) => {
+export const BlackHole = ({ attacks, isPaused = false }: BlackHoleProps) => {
     const diskRef = useRef<THREE.Group>(null);
     const particlesRef = useRef<THREE.Group>(null);
     const [hoveredParticle, setHoveredParticle] = useState<number | null>(null);
@@ -66,6 +67,8 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
         return temp;
     }, [attacks]); // Re-run if attacks change to update colors
 
+    // ... (existing code)
+
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
 
@@ -76,12 +79,16 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
 
         // Update particles
         if (particlesRef.current) {
+            // If the scene is paused via prop (parent hover) or local hover, do not update positions
+            const shouldPause = isPaused || hoveredParticle !== null;
+
             particlesRef.current.children.forEach((child, i) => {
                 const particle = particles[i];
 
-                // We use userData for physics state
+                // We always update scale so they stay visible
                 const userData = child.userData as { radius: number; angle: number; speed: number; initialRadius: number };
 
+                // Initialize if needed
                 if (!userData.radius) {
                     userData.radius = particle.radius;
                     userData.angle = particle.angle;
@@ -89,21 +96,25 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
                     userData.initialRadius = particle.radius;
                 }
 
-                // Move inwards
-                userData.radius -= userData.speed * 0.01;
-                // Spiral rotation
-                userData.angle += (userData.speed * 0.02) * (5 / userData.radius);
+                // Only move if not paused
+                if (!shouldPause) {
+                    // Move inwards
+                    userData.radius -= userData.speed * 0.01;
+                    // Spiral rotation
+                    userData.angle += (userData.speed * 0.02) * (5 / userData.radius);
 
-                // Reset if hit event horizon
-                if (userData.radius < 1.2) {
-                    userData.radius = userData.initialRadius;
+                    // Reset if hit event horizon
+                    if (userData.radius < 1.2) {
+                        userData.radius = userData.initialRadius;
+                    }
+
+                    // Update Mesh position
+                    child.position.x = userData.radius * Math.cos(userData.angle);
+                    child.position.z = userData.radius * Math.sin(userData.angle);
+                    child.position.y = particle.yOffset + Math.sin(time + particle.id) * 0.1;
                 }
 
-                // Update Mesh position
-                child.position.x = userData.radius * Math.cos(userData.angle);
-                child.position.z = userData.radius * Math.sin(userData.angle);
-                child.position.y = particle.yOffset + Math.sin(time + particle.id) * 0.1;
-
+                // Update visual scale (always do this so they don't pop/disappear)
                 child.scale.x = (5 / userData.radius) * particle.size;
                 child.scale.y = particle.size;
                 child.scale.z = particle.size;
@@ -140,7 +151,6 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
                     />
                 </Torus>
             </group>
-
             {/* Particles (Attacks) */}
             <group ref={particlesRef}>
                 {particles.map((p, i) => (
@@ -150,7 +160,8 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
                         onPointerOver={(e) => { e.stopPropagation(); setHoveredParticle(i); }}
                         onPointerOut={() => setHoveredParticle(null)}
                     >
-                        <sphereGeometry args={[1, 8, 8]} /> {/* Geometry size is 1, scaled by mesh.scale */}
+                        {/* Larger geometry for better hit detection, visual size controlled by scale */}
+                        <sphereGeometry args={[2, 8, 8]} />
                         <meshBasicMaterial color={p.color} toneMapped={false} />
                         {hoveredParticle === i && p.attack && (
                             <Html distanceFactor={10}>
@@ -158,8 +169,8 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
                                     <div className="font-bold text-amber-500 mb-1">{p.attack.type}</div>
                                     <div className="text-gray-300">IP: {p.attack.ip}</div>
                                     <div className={`mt-1 capitalize ${p.attack.severity === 'critical' ? 'text-red-400' :
-                                            p.attack.severity === 'high' ? 'text-orange-400' :
-                                                'text-blue-400'
+                                        p.attack.severity === 'high' ? 'text-orange-400' :
+                                            'text-blue-400'
                                         }`}>
                                         {p.attack.severity} Severity
                                     </div>
@@ -173,6 +184,6 @@ export const BlackHole = ({ attacks }: BlackHoleProps) => {
             {/* Strong Light from Center */}
             <pointLight position={[0, 0, 0]} intensity={2} color="#f59e0b" distance={10} />
             <ambientLight intensity={0.2} />
-        </group>
+        </group >
     );
 };

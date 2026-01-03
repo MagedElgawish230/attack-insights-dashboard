@@ -5,6 +5,7 @@ import { AttackTypeChart } from "@/components/AttackTypeChart";
 import { useState } from "react";
 import { RealtimeAttackFeed } from "@/components/RealtimeAttackFeed";
 import { Scene3D } from "@/components/Scene3D";
+import { RetrainButton } from "@/components/RetrainButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/sentriai-logo.png";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -18,7 +19,7 @@ import {
 import { useDashboardData } from "@/hooks/use-dashboard-data";
 
 const Index = () => {
-  const { websites, isLoading } = useDashboardData();
+  const { websites, isLoading, toggleFalsePositive } = useDashboardData();
   const [selectedWebsiteId, setSelectedWebsiteId] = useState<string>("");
 
   // Update selected website when data is loaded
@@ -129,10 +130,16 @@ const Index = () => {
             title="False Positives"
             value={selectedWebsite.stats.falsePositives}
             icon={Activity}
-            trend={{ value: 5, isPositive: true }}
             variant="warning"
           />
         </div>
+
+        {/* Retrain AI Model Button */}
+        {parseInt(selectedWebsite.stats.falsePositives) > 0 && (
+          <div className="mb-8 flex justify-center">
+            <RetrainButton />
+          </div>
+        )}
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -163,7 +170,11 @@ const Index = () => {
         </div>
 
         {/* Real-time Feed */}
-        <RealtimeAttackFeed attacks={selectedWebsite.recentAttacks} />
+        {/* Real-time Feed */}
+        <RealtimeAttackFeed
+          attacks={selectedWebsite.recentAttacks}
+          onToggleFalsePositive={toggleFalsePositive}
+        />
       </main>
     </div>
   );

@@ -16,9 +16,17 @@ interface Scene3DProps {
   attacks: Attack[];
 }
 
+import { useState } from "react";
+
 export const Scene3D = ({ attacks }: Scene3DProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div className="w-full h-[400px] rounded-lg overflow-hidden border-2 border-primary/30 bg-background/50 relative">
+    <div
+      className="w-full h-[400px] rounded-lg overflow-hidden border-2 border-primary/30 bg-background/50 relative transition-colors duration-300"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Darker background for space effect */}
       <div className="absolute inset-0 bg-[#000000] -z-10" />
       <Canvas>
@@ -28,7 +36,7 @@ export const Scene3D = ({ attacks }: Scene3DProps) => {
         <BlackHole attacks={attacks} />
         <OrbitControls
           enableZoom={false}
-          autoRotate
+          autoRotate={!isHovered}
           autoRotateSpeed={0.2}
           enablePan={false}
           minPolarAngle={Math.PI / 4}

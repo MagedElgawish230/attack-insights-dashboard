@@ -24,6 +24,8 @@ export interface WebsiteData {
         time: string;
         status: string;
         payload: string;
+        location?: string;
+        is_false_positive?: boolean;
     }>;
 }
 

@@ -17,6 +17,7 @@ create table public.attacks (
   ip_address text not null,
   status text not null, -- 'blocked', 'detected'
   payload text, 
+  is_false_positive boolean default false,
   
   -- Metadata
   request_method text,
@@ -37,6 +38,11 @@ create policy "Allow anon insert to attacks"
     on public.attacks for insert
     to anon
     with check (true);
+
+create policy "Allow anon update to attacks"
+    on public.attacks for update
+    to anon
+    using (true);
 
 -- Indexes
 create index attacks_target_url_idx on public.attacks(target_url);

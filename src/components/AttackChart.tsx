@@ -38,6 +38,7 @@ export const AttackChart = ({ data }: { data: AttackData[] }) => {
                 borderRadius: "0.5rem",
                 color: "hsl(var(--foreground))",
               }}
+              cursor={{ stroke: 'hsl(var(--muted-foreground))', strokeWidth: 1, strokeDasharray: '4 4' }}
             />
             <Area
               type="monotone"
@@ -46,6 +47,7 @@ export const AttackChart = ({ data }: { data: AttackData[] }) => {
               fillOpacity={1}
               fill="url(#attackGradient)"
               strokeWidth={2}
+              activeDot={{ r: 6, strokeWidth: 0 }}
             />
             <Area
               type="monotone"
@@ -54,6 +56,7 @@ export const AttackChart = ({ data }: { data: AttackData[] }) => {
               fillOpacity={1}
               fill="url(#blockedGradient)"
               strokeWidth={2}
+              activeDot={{ r: 6, strokeWidth: 0 }}
             />
           </AreaChart>
         </ResponsiveContainer>
