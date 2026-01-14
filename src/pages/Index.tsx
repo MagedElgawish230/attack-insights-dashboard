@@ -1,4 +1,4 @@
-import { Shield, Activity, AlertTriangle, CheckCircle, TrendingUp, Globe } from "lucide-react";
+import { Shield, Activity, AlertTriangle, CheckCircle, TrendingUp, Globe, FileText } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
 import { AttackChart } from "@/components/AttackChart";
 import { AttackTypeChart } from "@/components/AttackTypeChart";
@@ -9,6 +9,8 @@ import { RetrainButton } from "@/components/RetrainButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/sentriai-logo.png";
 import { ModeToggle } from "@/components/mode-toggle";
+import { ExecutiveReportModal } from "@/components/ExecutiveReportModal";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -21,6 +23,7 @@ import { useDashboardData } from "@/hooks/use-dashboard-data";
 const Index = () => {
   const { websites, isLoading, toggleFalsePositive } = useDashboardData();
   const [selectedWebsiteId, setSelectedWebsiteId] = useState<string>("");
+  const [reportModalOpen, setReportModalOpen] = useState(false);
 
   // Update selected website when data is loaded
   if (!selectedWebsiteId && websites.length > 0) {
@@ -79,6 +82,15 @@ const Index = () => {
                   </SelectContent>
                 </Select>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setReportModalOpen(true)}
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+              >
+                <FileText className="w-4 h-4" />
+                <span className="hidden sm:inline">Export Report</span>
+              </Button>
               <div className="px-3 py-1.5 rounded-full bg-success/20 border border-success/30 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 <span className="text-sm font-medium text-success">System Active</span>
@@ -176,6 +188,13 @@ const Index = () => {
           onToggleFalsePositive={toggleFalsePositive}
         />
       </main>
+
+      {/* Executive Report Modal */}
+      <ExecutiveReportModal
+        isOpen={reportModalOpen}
+        onClose={() => setReportModalOpen(false)}
+        stats={selectedWebsite.stats}
+      />
     </div>
   );
 };
