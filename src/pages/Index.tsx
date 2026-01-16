@@ -194,6 +194,7 @@ const Index = () => {
         isOpen={reportModalOpen}
         onClose={() => setReportModalOpen(false)}
         stats={selectedWebsite.stats}
+        attackTypes={selectedWebsite.attackTypes}
       />
     </div>
   );
